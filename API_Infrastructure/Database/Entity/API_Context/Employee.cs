@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace API_Tutorial.Models
+﻿namespace API_Infrastructure
 {
     public partial class Employee
     {

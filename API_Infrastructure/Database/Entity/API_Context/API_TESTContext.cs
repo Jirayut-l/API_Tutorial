@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace API_Tutorial.Models
+namespace API_Infrastructure
 {
     public partial class API_TESTContext : DbContext
     {
@@ -22,7 +20,6 @@ namespace API_Tutorial.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=LAPTOP-HHSNLMNF;Database=API_TEST; Trusted_Connection=True;");
             }
         }

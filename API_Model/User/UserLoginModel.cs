@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace API_Tutorial.Models
+﻿namespace API_Model
 {
-    public partial class UserLogin
+    public class UserLoginModel
     {
         public int PkUid { get; set; }
         public string Username { get; set; }
