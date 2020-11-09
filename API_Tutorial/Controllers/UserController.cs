@@ -20,6 +20,7 @@ namespace API_Tutorial.Controllers
 
         // GET: api/<UserController>
         [HttpGet]
+        //[Route("get-all")]
         public async Task<IActionResult> Get()
         {
             try
@@ -49,9 +50,7 @@ namespace API_Tutorial.Controllers
             try
             {
                 var response = await _userService.CreateUserLogin(model);
-                if (response.Success) return Ok(response);
-                
-                return BadRequest();
+               return Ok(response);
             }
             catch (Exception ex)
             {
@@ -66,9 +65,18 @@ namespace API_Tutorial.Controllers
         }
 
         // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{pkUid}")]
+        public async Task<IActionResult> Delete(int pkUid)
         {
+            try
+            {
+                var response = await _userService.DeleteUserLogin(pkUid);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpPatch]

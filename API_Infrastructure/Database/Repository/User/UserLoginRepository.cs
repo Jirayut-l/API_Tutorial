@@ -27,5 +27,13 @@ namespace API_Infrastructure
             _apiTestContext.UserLogin.Add(entity);
             _apiTestContext.SaveChanges();
         }
+
+        public void Delete(int pkUid)
+        {
+            var entity = _apiTestContext.UserLogin.FirstOrDefault(f => f.PkUid == pkUid);
+            if(entity==null) return;
+            _apiTestContext.UserLogin.Remove(entity);
+            _apiTestContext.SaveChanges();
+        }
     }
 }

@@ -8,4 +8,9 @@
     <ProjectReference Include="..\API_Infrastructure\API_Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Authentication\RefreshToken\Interface\" />
+    <Folder Include="Authentication\RevokeToken\Interface\" />
+  </ItemGroup>
+
 </Project>

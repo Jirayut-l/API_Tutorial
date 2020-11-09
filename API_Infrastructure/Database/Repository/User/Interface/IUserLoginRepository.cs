@@ -6,5 +6,6 @@ namespace API_Infrastructure
     {
         UserLoginModel GetAllUserLogin();
         void Create(UserLoginModel model);
+        void Delete(int pkUid);
     }
 }

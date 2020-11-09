@@ -7,6 +7,7 @@ namespace API_Application
     {
         Task<Result<UserLoginModel>> GetAllUserLogin();
         Task<Result> CreateUserLogin(UserLoginModel model);
+        Task<Result> DeleteUserLogin(int PkUid);
     }
 
 }

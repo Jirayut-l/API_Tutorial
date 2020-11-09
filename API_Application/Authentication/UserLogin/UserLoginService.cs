@@ -12,7 +12,7 @@ namespace API_Application
             _userLoginRepository = userLoginRepository;
         }
 
-        public UserLoginModel GetAllUserLogin()
+        public UserLoginModel GetAllUser()
         {
             return _userLoginRepository.GetAllUserLogin();
         }
@@ -20,6 +20,11 @@ namespace API_Application
         public void Create(UserLoginModel model)
         {
             _userLoginRepository.Create(model);
+        }
+
+        public void Delete(int pkUid)
+        {
+           _userLoginRepository.Delete(pkUid);
         }
     }
 }

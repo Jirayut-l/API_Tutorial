@@ -19,7 +19,7 @@ namespace API_Application
         {
             try
             {
-                var result = _userLoginService.GetAllUserLogin();
+                var result = _userLoginService.GetAllUser();
                 return Task.FromResult(ResultMessage<UserLoginModel>.Success(result));
             }
             catch (Exception ex)
@@ -34,6 +34,20 @@ namespace API_Application
             {
                 _userLoginService.Create(model);
                 return Task.FromResult(ResultMessage.Success(Constants.CreateSuccess));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(ResultMessage.ExceptionError(ex));
+            }
+        }
+
+        public Task<Result> DeleteUserLogin(int PkUid)
+        {
+            try
+            {
+                if (PkUid <= 0) return Task.FromResult(ResultMessage.Error(Constants.CannotDeletePK_Null));
+                _userLoginService.Delete(PkUid);
+                 return Task.FromResult(ResultMessage.Success(Constants.DeleteSuccess));
             }
             catch (Exception ex)
             {

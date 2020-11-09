@@ -24,7 +24,7 @@ namespace API_Tutorial.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            var result = _userLoginService.GetAllUserLogin();
+            var result = _userLoginService.GetAllUser();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

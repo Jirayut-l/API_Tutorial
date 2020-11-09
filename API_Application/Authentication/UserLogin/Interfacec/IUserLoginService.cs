@@ -5,7 +5,8 @@ namespace API_Application
 {
     public interface IUserLoginService
     {
-        UserLoginModel GetAllUserLogin();
+        UserLoginModel GetAllUser();
         void Create(UserLoginModel model);
+        void Delete(int pkUid);
     }
 }
