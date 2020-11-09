@@ -18,4 +18,8 @@
     <ProjectReference Include="..\API_Model\API_Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\Repository\Employee\" />
+  </ItemGroup>
+
 </Project>
