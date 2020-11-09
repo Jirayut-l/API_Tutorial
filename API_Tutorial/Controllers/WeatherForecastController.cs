@@ -15,16 +15,16 @@ namespace API_Tutorial.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly IUserService _userService;
-        public WeatherForecastController(IUserService userService)
+        private readonly IUserLoginService _userLoginService;
+        public WeatherForecastController(IUserLoginService userLoginService)
         {
-            _userService = userService;
+            _userLoginService = userLoginService;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            var result = _userService.GetUserLogin();
+            var result = _userLoginService.GetAllUserLogin();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

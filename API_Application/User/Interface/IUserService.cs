@@ -1,11 +1,12 @@
-﻿using API_Model;
+﻿using System.Threading.Tasks;
+using API_Model;
 
 namespace API_Application
 {
     public interface IUserService
     {
-        string printText();
-        UserLoginModel GetUserLogin();
+        Task<Result<UserLoginModel>> GetAllUserLogin();
+        Task<Result> CreateUserLogin(UserLoginModel model);
     }
 
 }

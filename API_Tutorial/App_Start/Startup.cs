@@ -2,6 +2,7 @@ using API_Infrastructure;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,8 +23,8 @@ namespace API_Tutorial
         {
             services.AddControllers();
             services.AddAutoMapper(typeof(AutoMappingService));
-
-            //services.AddScoped<IUserRepository, UserRepository>();
+            //services.AddDbContext<API_TESTContext>(options => options.UseSqlServer("Server=LAPTOP-HHSNLMNF;Database=API_TEST; Trusted_Connection=True;"));
+            //services.AddScoped<IUserLoginRepository, UserLoginRepository>();
             //services.AddScoped<IUserService,UserService>();
         }
 

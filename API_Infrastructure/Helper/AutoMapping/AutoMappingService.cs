@@ -9,6 +9,7 @@ namespace API_Infrastructure
         public AutoMappingService()
         {
             CreateMap<UserLogin,UserLoginModel>();
+            CreateMap<UserLoginModel, UserLogin>();
         }
     }
 }

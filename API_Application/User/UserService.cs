@@ -1,25 +1,44 @@
-﻿using API_Infrastructure;
+﻿using System;
+using System.Numerics;
+using System.Threading.Tasks;
+using API_Infrastructure;
 using API_Model;
 
 namespace API_Application
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserLoginService _userLoginService;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserLoginService userLoginService)
         {
-            _userRepository = userRepository;
+            _userLoginService = userLoginService;
         }
 
-        public string printText()
+        public Task<Result<UserLoginModel>> GetAllUserLogin()
         {
-            return "Print By Layer Application";
+            try
+            {
+                var result = _userLoginService.GetAllUserLogin();
+                return Task.FromResult(ResultMessage<UserLoginModel>.Success(result));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(ResultMessage<UserLoginModel>.ExceptionError(ex));
+            }
         }
 
-        public UserLoginModel GetUserLogin()
+        public Task<Result> CreateUserLogin(UserLoginModel model)
         {
-            return _userRepository.GetUserLogin();
+            try
+            {
+                _userLoginService.Create(model);
+                return Task.FromResult(ResultMessage.Success(Constants.CreateSuccess));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(ResultMessage.ExceptionError(ex));
+            }
         }
     }
 }
