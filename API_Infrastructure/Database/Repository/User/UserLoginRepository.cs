@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using API_Model;
 using AutoMapper;
 
@@ -15,9 +16,14 @@ namespace API_Infrastructure
             //_apiTestContext = apiTestContext;
             _apiTestContext = new API_TESTContext();
         }
-        public UserLoginModel GetAllUserLogin()
+        public IEnumerable<UserLoginModel> GetAllUserLogin()
         {
-            var entity = _apiTestContext.UserLogin.FirstOrDefault();
+            return _mapper.Map<IEnumerable<UserLoginModel>>(_apiTestContext.UserLogin);
+        }
+
+        public UserLoginModel GetUserLogin(int pkUid)
+        {
+            var entity = _apiTestContext.UserLogin.Find(pkUid);
             return _mapper.Map<UserLoginModel>(entity);
         }
 
@@ -30,10 +36,28 @@ namespace API_Infrastructure
 
         public void Delete(int pkUid)
         {
-            var entity = _apiTestContext.UserLogin.FirstOrDefault(f => f.PkUid == pkUid);
+            //var entity = _apiTestContext.UserLogin.FirstOrDefault(f => f.PkUid == pkUid);
+            var entity = _apiTestContext.UserLogin.Find(pkUid);
             if(entity==null) return;
             _apiTestContext.UserLogin.Remove(entity);
             _apiTestContext.SaveChanges();
+        }
+
+        public void Update(int pkUid, UserLoginModel model)
+        {
+            //var entity = _apiTestContext.UserLogin.FirstOrDefault(f => f.PkUid == pkUid);
+            //if(entity==null)return;
+            //entity.Password = model.Password;
+            //entity.Username = model.Username;
+             model.PkUid = pkUid;
+            _apiTestContext.Update(_mapper.Map<UserLogin>(model));
+            _apiTestContext.SaveChanges();
+        }
+
+        public void UpdateRange(IEnumerable<UserLoginModel> models)
+        {
+           _apiTestContext.UpdateRange(_mapper.Map<IEnumerable<UserLogin>>(models));
+           _apiTestContext.SaveChanges();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using API_Application;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using API_Model;
 
@@ -26,7 +27,6 @@ namespace API_Tutorial.Controllers
             try
             {
                 var response = await _userService.GetAllUserLogin();
-                if (!response.Success) return BadRequest();
                 return Ok(response.Value);
             }
             catch (Exception ex)
@@ -59,9 +59,18 @@ namespace API_Tutorial.Controllers
         }
 
         // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<IActionResult> Put(IEnumerable<UserLoginModel> models)
         {
+            try
+            {
+                var response = await _userService.UpdateRangeUserLogin(models);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // DELETE api/<UserController>/5
@@ -79,9 +88,18 @@ namespace API_Tutorial.Controllers
             }
         }
 
-        [HttpPatch]
-        public void Patch()
+        [HttpPatch("{pkUid}")]
+        public async Task<IActionResult> Patch(int pkUid, UserLoginModel model)
         {
+            try
+            {
+                var response = await _userService.UpdateUserLogin(pkUid, model);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
 
         }
     }

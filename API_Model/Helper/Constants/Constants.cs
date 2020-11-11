@@ -4,8 +4,9 @@
     {
         #region #Login
         public static string CreateSuccess => "Create Success";
-        public static string CannotDeletePK_Null => "Cannot Delete UserLogin PK NULL";
+        public static string IsNullValue => "Cannot Process ISNULL Value";
         public static string DeleteSuccess => "Delete Success";
+        public static string UpdateSuccess => "Update Success";
         #endregion
     }
 }

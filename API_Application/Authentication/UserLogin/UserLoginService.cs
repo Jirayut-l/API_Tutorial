@@ -1,4 +1,5 @@
-﻿using API_Infrastructure;
+﻿using System.Collections.Generic;
+using API_Infrastructure;
 using API_Model;
 
 namespace API_Application
@@ -12,9 +13,14 @@ namespace API_Application
             _userLoginRepository = userLoginRepository;
         }
 
-        public UserLoginModel GetAllUser()
+        public IEnumerable<UserLoginModel> GetAllUser()
         {
             return _userLoginRepository.GetAllUserLogin();
+        }
+
+        public UserLoginModel GetUserLogin(int pkUid)
+        {
+            return _userLoginRepository.GetUserLogin(pkUid);
         }
 
         public void Create(UserLoginModel model)
@@ -25,6 +31,16 @@ namespace API_Application
         public void Delete(int pkUid)
         {
            _userLoginRepository.Delete(pkUid);
+        }
+
+        public void Update(int pkUid, UserLoginModel model)
+        {
+            _userLoginRepository.Update(pkUid,model);
+        }
+
+        public void UpdateRange(IEnumerable<UserLoginModel> models)
+        {
+           _userLoginRepository.UpdateRange(models);
         }
     }
 }

@@ -23,15 +23,14 @@ namespace API_Tutorial.Controllers
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
-        {
-            var result = _userLoginService.GetAllUser();
+        { ;
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)],
-                ShowValue = result.Username
+                ShowValue = "Test1"
             })
             .ToArray();
           
