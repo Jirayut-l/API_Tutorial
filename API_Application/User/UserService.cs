@@ -30,6 +30,20 @@ namespace API_Application
             }
         }
 
+        public Task<Result<UserLoginModel>> GetUserLogin(int pkUid)
+        {
+            try
+            {
+                var result = _userLoginService.GetUserLogin(pkUid);
+                if (result == null) return Task.FromResult(ResultMessage<UserLoginModel>.Error(Constants.NotFound));
+                return Task.FromResult(ResultMessage<UserLoginModel>.Success(result));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(ResultMessage<UserLoginModel>.ExceptionError(ex));
+            }
+        }
+
         public Task<Result> CreateUserLogin(UserLoginModel model)
         {
             try
@@ -62,7 +76,7 @@ namespace API_Application
             try
             {
                 if (pkUid < 0) return Task.FromResult(ResultMessage.Error(Constants.IsNullValue));
-                _userLoginService.Update(pkUid,model);
+                _userLoginService.Update(pkUid, model);
                 return Task.FromResult(ResultMessage.Success(Constants.UpdateSuccess));
             }
             catch (Exception ex)

@@ -27,7 +27,7 @@ namespace API_Tutorial.Controllers
             try
             {
                 var response = await _userService.GetAllUserLogin();
-                return Ok(response.Value);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -37,10 +37,18 @@ namespace API_Tutorial.Controllers
         }
 
         // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{pkUid}")]
+        public async Task<IActionResult> Get(int pkUid)
         {
-            return "value";
+            try
+            {
+                var response = await _userService.GetUserLogin(pkUid);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // POST api/<UserController>
@@ -50,7 +58,7 @@ namespace API_Tutorial.Controllers
             try
             {
                 var response = await _userService.CreateUserLogin(model);
-               return Ok(response);
+                return Ok(response);
             }
             catch (Exception ex)
             {

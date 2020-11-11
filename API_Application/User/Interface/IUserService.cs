@@ -7,6 +7,7 @@ namespace API_Application
     public interface IUserService
     {
         Task<Result<IEnumerable<UserLoginModel>>> GetAllUserLogin();
+        Task<Result<UserLoginModel>> GetUserLogin(int pkUid);
         Task<Result> CreateUserLogin(UserLoginModel model);
         Task<Result> DeleteUserLogin(int pkUid);
         Task<Result> UpdateUserLogin(int pkUid,UserLoginModel model);
