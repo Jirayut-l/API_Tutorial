@@ -9,8 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Authentication\RefreshToken\Interface\" />
-    <Folder Include="Authentication\RevokeToken\Interface\" />
+    <Folder Include="Employee\" />
   </ItemGroup>
 
 </Project>

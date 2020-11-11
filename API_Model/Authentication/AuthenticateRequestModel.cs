@@ -2,12 +2,11 @@
 
 namespace API_Model
 {
-    public class UserLoginModel
+    public class AuthenticateRequestModel
     {
-        public int PkUid { get; set; }
+        [Required]
         public string Username { get; set; }
+        [Required]
         public string Password { get; set; }
-        public string Role { get; set; }
-        public int? FkEmpId { get; set; }
     }
 }

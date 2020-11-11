@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace API_Infrastructure
+﻿namespace API_Model
 {
-    public partial class Employee
+    public class EmployeeModel
     {
         public int PkEmpId { get; set; }
         public string Prefix { get; set; }
