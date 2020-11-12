@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API_Model;
+using Microsoft.AspNetCore.Http;
 
 
 namespace API_Tutorial.Controllers
@@ -109,6 +110,42 @@ namespace API_Tutorial.Controllers
                 return BadRequest(ex);
             }
 
+        }
+
+
+        [HttpPost]
+        [Route("authenticate")]
+        public async Task<IActionResult> Authenticate(AuthenticateRequestModel model)
+        {
+            try
+            {
+                var response = await _userService.Authenticate(model, IP_Address());
+                SetTokenCookie(response.Value.RefreshToken);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+        }
+
+
+        private string IP_Address()
+        {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+                return Request.Headers["X-Forwarded-For"];
+            else
+                return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+        }
+        private void SetTokenCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(3)
+            };
+            Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
     }
 }

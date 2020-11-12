@@ -16,9 +16,13 @@ namespace API_Application
     {
         private readonly IUserLoginService _userLoginService;
         private readonly AppSettings _appSettings;
-        public UserService(IUserLoginService userLoginService, IOptions<AppSettings> appSettings)
+        private readonly IEmployeeService _employeeService;
+        private readonly IRefreshTokenService _refreshTokenService;
+        public UserService(IUserLoginService userLoginService, IOptions<AppSettings> appSettings, IEmployeeService employeeService, IRefreshTokenService refreshTokenService)
         {
             _userLoginService = userLoginService;
+            _employeeService = employeeService;
+            _refreshTokenService = refreshTokenService;
             _appSettings = appSettings.Value;
         }
 
@@ -110,23 +114,50 @@ namespace API_Application
                 var user = _userLoginService.GetAllUser().FirstOrDefault(f => f.Username == model.Username && f.Password == model.Password);
 
                 if (user == null) return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error(Constants.NotFoundUserLogin));
-                //var userDetails = _userLoginService.(model.Username);
-                //if (checkUserActiveDirectory)
-                //{
-                //    var userDetails = _userRepository.GetDetailUser(model.Username);
-                //    var jwtToken = GenerateJwtToken(userDetails);
-                //    var refreshToken = GenerateRefreshToken(ipAddress, model.Username);
 
-                //    _refreshTokenService.CreateRefreshToken(refreshToken);
+                var employee = _employeeService.GetEmployee(user.FkEmpId ?? 0);
 
-                //    var resultAuthentication = new AuthenticateResponseModel(userDetails, jwtToken, refreshToken.Token);
+                 var jwtToken = GenerateJwtToken(user);
 
-                //    return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Success(resultAuthentication));
-                //}
+                 var refreshToken = GenerateRefreshToken(ipAddress, model.Username);
 
-                return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error("Username or password is incorrect"));
+                _refreshTokenService.CreateRefreshToken(refreshToken);
+
+                var resultAuthentication = new AuthenticateResponseModel(employee, jwtToken, refreshToken.Token,user.Role);
+
+                return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Success(resultAuthentication));
             }
             catch (Exception ex)
+            {
+                return Task.FromResult(ResultMessage<AuthenticateResponseModel>.ExceptionError(ex));
+            }
+        }
+
+        public Task<Result<AuthenticateResponseModel>> RefreshToken(string token, string ipAddress)
+        {
+            try
+            {
+                var refreshToken = _refreshTokenService.GetRefreshTokenByToken(token);
+                if (refreshToken == null)
+                    return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error("Invalid token"));
+
+                if (!refreshToken.IsActive && !refreshToken.IsExpired)
+                    return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error("Token Expired"));
+
+                var user =_userLoginService.GetAllUser().FirstOrDefault(f => f.Username == refreshToken.CreateByUser);
+
+                if (user == null) return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error(Constants.NotFoundUserLogin));
+
+                var employee = _employeeService.GetEmployee(user.FkEmpId ?? 0);
+
+                var jwtToken = GenerateJwtToken(user);
+
+                var resultAuthentication = new AuthenticateResponseModel(employee, jwtToken, refreshToken.Token,user.Role);
+
+                return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Success(resultAuthentication));
+            }
+            catch (Exception ex)
+
             {
                 return Task.FromResult(ResultMessage<AuthenticateResponseModel>.ExceptionError(ex));
             }
@@ -150,7 +181,7 @@ namespace API_Application
             return tokenHandler.WriteToken(token);
         }
 
-        private RefreshTokenModel GenerateRefreshToken(string ipAddress, string username)
+        private static RefreshTokenModel GenerateRefreshToken(string ipAddress, string username)
         {
             var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[64];

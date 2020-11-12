@@ -10,6 +10,10 @@ namespace API_Infrastructure
         {
             CreateMap<UserLogin,UserLoginModel>();
             CreateMap<UserLoginModel, UserLogin>();
+            CreateMap<EmployeeModel, Employee>();
+            CreateMap<Employee, EmployeeModel>();
+            CreateMap<RefreshToken, RefreshTokenModel>();
+            CreateMap<RefreshTokenModel, RefreshToken>();
         }
     }
 }

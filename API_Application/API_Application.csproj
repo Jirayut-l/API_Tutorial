@@ -8,8 +8,4 @@
     <ProjectReference Include="..\API_Infrastructure\API_Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Employee\" />
-  </ItemGroup>
-
 </Project>

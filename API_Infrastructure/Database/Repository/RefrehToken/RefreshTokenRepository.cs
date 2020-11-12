@@ -10,10 +10,10 @@ namespace API_Infrastructure
         private readonly IMapper _mapper;
         private readonly API_TESTContext _apiTestContext;
 
-        public RefreshTokenRepository(IMapper mapper, API_TESTContext apiTestContext)
+        public RefreshTokenRepository(IMapper mapper)
         {
             _mapper = mapper;
-            _apiTestContext = apiTestContext;
+            _apiTestContext = new API_TESTContext();
         }
 
         public void CreateRefreshToken(RefreshTokenModel model)
