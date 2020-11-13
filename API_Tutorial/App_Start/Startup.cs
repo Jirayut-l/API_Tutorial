@@ -8,7 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.Text;
+using API_Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API_Tutorial
@@ -49,9 +51,13 @@ namespace API_Tutorial
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+            services.AddAuthorization(options =>
+                options.AddPolicy(Role.Admin,
+                    policy => policy.Requirements.Add(new RoleRequirement(new List<string>() { Role.Admin }))));
             //services.AddDbContext<API_TESTContext>(options => options.UseSqlServer("Server=LAPTOP-HHSNLMNF;Database=API_TEST; Trusted_Connection=True;"));
             //services.AddScoped<IUserLoginRepository, UserLoginRepository>();
             //services.AddScoped<IUserService,UserService>();
+
         }
 
 

@@ -18,11 +18,13 @@ namespace API_Application
         private readonly AppSettings _appSettings;
         private readonly IEmployeeService _employeeService;
         private readonly IRefreshTokenService _refreshTokenService;
-        public UserService(IUserLoginService userLoginService, IOptions<AppSettings> appSettings, IEmployeeService employeeService, IRefreshTokenService refreshTokenService)
+        private readonly IRevokeTokenService _revokeTokenService;
+        public UserService(IUserLoginService userLoginService, IOptions<AppSettings> appSettings, IEmployeeService employeeService, IRefreshTokenService refreshTokenService, IRevokeTokenService revokeTokenService)
         {
             _userLoginService = userLoginService;
             _employeeService = employeeService;
             _refreshTokenService = refreshTokenService;
+            _revokeTokenService = revokeTokenService;
             _appSettings = appSettings.Value;
         }
 
@@ -43,7 +45,7 @@ namespace API_Application
         {
             try
             {
-                var result = _userLoginService.GetUserLogin(pkUid);
+                var result = _userLoginService.GetUserLoginByPK(pkUid);
                 if (result == null) return Task.FromResult(ResultMessage<UserLoginModel>.Error(Constants.NotFound));
                 return Task.FromResult(ResultMessage<UserLoginModel>.Success(result));
             }
@@ -111,7 +113,7 @@ namespace API_Application
         {
             try
             {
-                var user = _userLoginService.GetAllUser().FirstOrDefault(f => f.Username == model.Username && f.Password == model.Password);
+                var user = _userLoginService.Authenticate(model);
 
                 if (user == null) return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error(Constants.NotFoundUserLogin));
 
@@ -139,10 +141,10 @@ namespace API_Application
             {
                 var refreshToken = _refreshTokenService.GetRefreshTokenByToken(token);
                 if (refreshToken == null)
-                    return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error("Invalid token"));
+                    return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error(Constants.InvalidToken));
 
                 if (!refreshToken.IsActive && !refreshToken.IsExpired)
-                    return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error("Token Expired"));
+                    return Task.FromResult(ResultMessage<AuthenticateResponseModel>.Error(Constants.TokenExpired));
 
                 var user =_userLoginService.GetAllUser().FirstOrDefault(f => f.Username == refreshToken.CreateByUser);
 
@@ -160,6 +162,32 @@ namespace API_Application
 
             {
                 return Task.FromResult(ResultMessage<AuthenticateResponseModel>.ExceptionError(ex));
+            }
+        }
+
+        public Task<Result<IEnumerable<RefreshTokenModel>>> GetAllRefreshToken()
+        {
+            try
+            {
+                var allRefreshToken = _refreshTokenService.GetAll();
+                return Task.FromResult(ResultMessage<IEnumerable<RefreshTokenModel>>.Success(allRefreshToken));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(ResultMessage<IEnumerable<RefreshTokenModel>>.ExceptionError(ex));
+            }
+        }
+
+        public Task<Result> RevokeToken(string token, string ipAddress)
+        {
+            try
+            {
+                var result = _revokeTokenService.RevokeToken(token, ipAddress);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(ResultMessage.ExceptionError(ex));
             }
         }
 

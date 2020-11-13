@@ -21,7 +21,21 @@ namespace API_Infrastructure
             return _mapper.Map<IEnumerable<UserLoginModel>>(_apiTestContext.UserLogin);
         }
 
-        public UserLoginModel GetUserLogin(int pkUid)
+        public UserLoginModel Authenticate(AuthenticateRequestModel model)
+        {
+            var entity = _apiTestContext.UserLogin.FirstOrDefault(f => f.Username == model.Username && f.Password == model.Password);
+            if (entity == null) return new UserLoginModel();
+            return _mapper.Map<UserLoginModel>(entity);
+        }
+
+        public UserLoginModel GetUserLoginByUsername(string username)
+        {
+            var entity = _apiTestContext.UserLogin.FirstOrDefault(f => f.Username == username);
+            if (entity == null) return new UserLoginModel();
+            return _mapper.Map<UserLoginModel>(entity);
+        }
+
+        public UserLoginModel GetUserLoginByPK(int pkUid)
         {
             var entity = _apiTestContext.UserLogin.Find(pkUid);
             return _mapper.Map<UserLoginModel>(entity);
@@ -38,7 +52,7 @@ namespace API_Infrastructure
         {
             //var entity = _apiTestContext.UserLogin.FirstOrDefault(f => f.PkUid == pkUid);
             var entity = _apiTestContext.UserLogin.Find(pkUid);
-            if(entity==null) return;
+            if (entity == null) return;
             _apiTestContext.UserLogin.Remove(entity);
             _apiTestContext.SaveChanges();
         }
@@ -49,15 +63,15 @@ namespace API_Infrastructure
             //if(entity==null)return;
             //entity.Password = model.Password;
             //entity.Username = model.Username;
-             model.PkUid = pkUid;
+            model.PkUid = pkUid;
             _apiTestContext.Update(_mapper.Map<UserLogin>(model));
             _apiTestContext.SaveChanges();
         }
 
         public void UpdateRange(IEnumerable<UserLoginModel> models)
         {
-           _apiTestContext.UpdateRange(_mapper.Map<IEnumerable<UserLogin>>(models));
-           _apiTestContext.SaveChanges();
+            _apiTestContext.UpdateRange(_mapper.Map<IEnumerable<UserLogin>>(models));
+            _apiTestContext.SaveChanges();
         }
     }
 }

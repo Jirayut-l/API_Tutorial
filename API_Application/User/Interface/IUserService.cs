@@ -14,6 +14,8 @@ namespace API_Application
         Task<Result> UpdateRangeUserLogin(IEnumerable<UserLoginModel> models);
         Task<Result<AuthenticateResponseModel>> Authenticate(AuthenticateRequestModel model, string ipAddress);
         Task<Result<AuthenticateResponseModel>> RefreshToken(string token, string ipAddress);
+        Task<Result<IEnumerable<RefreshTokenModel>>> GetAllRefreshToken();
+        Task<Result> RevokeToken(string token, string ipAddress);
     }
 
 }

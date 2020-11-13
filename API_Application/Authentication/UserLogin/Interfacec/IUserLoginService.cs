@@ -7,7 +7,9 @@ namespace API_Application
     public interface IUserLoginService
     {
         IEnumerable<UserLoginModel> GetAllUser();
-        UserLoginModel GetUserLogin(int pkUid);
+        UserLoginModel Authenticate(AuthenticateRequestModel model);
+        UserLoginModel GetUserLoginByUsername(string username);
+        UserLoginModel GetUserLoginByPK(int pkUid);
         void Create(UserLoginModel model);
         void Delete(int pkUid);
         void Update(int pkUid, UserLoginModel model);

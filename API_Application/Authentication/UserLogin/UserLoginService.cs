@@ -18,9 +18,19 @@ namespace API_Application
             return _userLoginRepository.GetAllUserLogin();
         }
 
-        public UserLoginModel GetUserLogin(int pkUid)
+        public UserLoginModel Authenticate(AuthenticateRequestModel model)
         {
-            return _userLoginRepository.GetUserLogin(pkUid);
+            return _userLoginRepository.Authenticate(model);
+        }
+
+        public UserLoginModel GetUserLoginByUsername(string username)
+        {
+            return _userLoginRepository.GetUserLoginByUsername(username);
+        }
+
+        public UserLoginModel GetUserLoginByPK(int pkUid)
+        {
+            return _userLoginRepository.GetUserLoginByPK(pkUid);
         }
 
         public void Create(UserLoginModel model)

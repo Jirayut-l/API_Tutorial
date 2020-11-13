@@ -12,11 +12,13 @@
         #endregion
 
 
-        #region [RevokeToken]
+        #region [Token]
 
         public static string CannotFoundToken => "Token Not Found";
         public static string SuccessRevokeToken => "Token Revoked";
         public static string CannotRevokeToken => "This Token was Revoked  ";
+        public static string InvalidToken => "Invalid Token";
+        public static string TokenExpired => "Token Expired";
 
         #endregion
     }

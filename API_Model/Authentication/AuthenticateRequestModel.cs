@@ -4,9 +4,9 @@ namespace API_Model
 {
     public class AuthenticateRequestModel
     {
-        [Required]
+        [Required(ErrorMessage = "UserName is required")]
         public string Username { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
     }
 }

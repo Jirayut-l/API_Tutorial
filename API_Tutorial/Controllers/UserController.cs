@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API_Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
 
 namespace API_Tutorial.Controllers
 {
+    //[Authorize]
     [Route("user")]
     [ApiController]
     public class UserController : ControllerBase
@@ -112,13 +114,14 @@ namespace API_Tutorial.Controllers
 
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
         public async Task<IActionResult> Authenticate(AuthenticateRequestModel model)
         {
             try
             {
+                if (!ModelState.IsValid) return BadRequest();
                 var response = await _userService.Authenticate(model, IP_Address());
                 SetTokenCookie(response.Value.RefreshToken);
                 return Ok(response);
@@ -130,6 +133,59 @@ namespace API_Tutorial.Controllers
 
         }
 
+        [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            try
+            {
+                var refreshToken = Request.Cookies["refreshToken"];
+                var response = await _userService.RefreshToken(refreshToken, IP_Address());
+                if (!response.Success) return Ok(response);
+
+                SetTokenCookie(response.Value.RefreshToken);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize(Policy = "Admin")]
+        //[Authorize(Roles = Role.Admin)]
+        [HttpGet]
+        [Route("get-all")]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                var allRefreshToken = _userService.GetAllRefreshToken();
+                return Ok(allRefreshToken.Result.Value);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+        }
+
+        [Authorize(Roles = Role.Admin)]
+        [HttpPost("revoke-token")]
+        public IActionResult RevokeToken(string tokenRevoke)
+        {
+            try
+            {
+                var token = tokenRevoke ?? Request.Cookies["refreshToken"];
+                var response = _userService.RevokeToken(token, IP_Address());
+                return Ok(response.Result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
         private string IP_Address()
         {
